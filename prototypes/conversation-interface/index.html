@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en" data-accent="amber">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Throwaway prototype for Voidstation conversation interface choices.">
+  <title>Voidstation conversation interface prototype</title>
+  <link rel="stylesheet" href="../../tokens.css">
+  <style>
+    /* Hallmark · genre: atmospheric · macrostructure: Workbench · theme: Midnight · tone: inherited dark minimal · anchor hue: selectable · enrichment: none · pre-emit critique: P5 H5 E5 S5 R5 V5 · contrast: pass (40–41) · slop: pass (42–45) · mobile: pass (34, 49, 50–57) */
+    * { box-sizing: border-box; }
+    html, body { min-block-size: 100%; overflow-x: clip; }
+    body {
+      margin: 0;
+      min-block-size: 100dvh;
+      background: var(--color-canvas);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+    }
+    button, textarea { font: inherit; }
+    button { color: inherit; line-height: 1; }
+    button, a { -webkit-tap-highlight-color: var(--color-clear); }
+    button:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 3px;
+    }
+    button:disabled { cursor: not-allowed; opacity: 0.55; }
+    .icon { inline-size: 1.125rem; block-size: 1.125rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+    .icon-button, .text-button, .send-button, .recent-item, .accent-choice, .variant-switcher button {
+      min-block-size: var(--target-size);
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-ink);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform var(--duration-micro) var(--ease-out), opacity var(--duration-short) var(--ease-out);
+    }
+    .icon-button, .variant-switcher button { display: inline-grid; flex: 0 0 var(--target-size); inline-size: var(--target-size); place-items: center; padding: 0; }
+    .text-button { padding-inline: var(--space-4); font-weight: 600; }
+    .text-button--accent, .send-button { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-accent-ink); }
+    .send-button { display: inline-grid; min-inline-size: var(--target-size); place-items: center; padding: 0 var(--space-4); font-weight: 700; }
+    .app-shell { min-block-size: 100dvh; padding-block-end: calc(var(--chrome-bottom) + env(safe-area-inset-bottom)); }
+    .prototype-chrome {
+      position: relative;
+      z-index: var(--z-chrome);
+      display: grid;
+      gap: var(--space-2);
+      padding: var(--space-3);
+      border-block-end: 1px solid var(--color-line);
+      background: var(--color-surface);
+      color: var(--color-ink-soft);
+      font-size: var(--text-xs);
+    }
+    .state-readout, .accent-control {
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-md);
+      background: var(--color-surface-raised);
+    }
+    .state-readout { padding: var(--space-2) var(--space-3); }
+    .accent-control { display: flex; align-items: center; gap: var(--space-1); padding: var(--space-1); }
+    .accent-label { padding-inline: var(--space-2); white-space: nowrap; }
+    .accent-choice { min-inline-size: var(--target-size); padding-inline: var(--space-2); font-size: var(--text-xs); }
+    .accent-choice[aria-pressed="true"] { border-color: var(--color-accent); color: var(--color-accent-strong); }
+    .mobile-bar { display: flex; align-items: center; justify-content: space-between; min-block-size: 3.75rem; padding: var(--space-2) var(--space-3); border-block-end: 1px solid var(--color-line); }
+    .wordmark, h1, h2, h3 { min-inline-size: 0; overflow-wrap: anywhere; font-family: var(--font-display); font-style: normal; }
+    .wordmark { margin: 0; font-size: var(--text-md); font-weight: 700; letter-spacing: -0.035em; }
+    .eyebrow, .message-role, .ledger-index, .command-prefix { color: var(--color-ink-muted); font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .screen-title { margin: 0; font-size: var(--text-sm); font-weight: 600; }
+    .recent-list { display: grid; gap: var(--space-1); }
+    .recent-item { display: grid; inline-size: 100%; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2); padding: var(--space-3); text-align: start; }
+    .recent-item[aria-current="true"] { border-color: var(--color-accent); background: var(--color-surface-raised); }
+    .recent-item > span:first-child { display: grid; min-inline-size: 0; }
+    .recent-item__title { overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .recent-item__meta { overflow: hidden; color: var(--color-ink-muted); font-size: var(--text-xs); text-overflow: ellipsis; white-space: nowrap; }
+    .recent-item__time { align-self: center; color: var(--color-ink-muted); font-size: var(--text-xs); }
+    .composer { display: grid; gap: var(--space-2); }
+    .composer label { color: var(--color-ink-soft); font-size: var(--text-sm); font-weight: 600; }
+    .composer__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2); align-items: end; }
+    .composer textarea {
+      min-block-size: var(--target-size);
+      max-block-size: 10rem;
+      resize: vertical;
+      border: 1px solid var(--color-line-strong);
+      border-radius: var(--radius-md);
+      outline: 2px solid var(--color-clear);
+      outline-offset: 1px;
+      background: var(--color-surface);
+      color: var(--color-ink);
+      padding: var(--space-3);
+      line-height: 1.25;
+    }
+    .composer textarea::placeholder { color: var(--color-ink-muted); }
+    .composer textarea:focus-visible { border-color: var(--color-line-strong); outline-color: var(--color-focus); outline-offset: 1px; }
+    .composer__helper { min-block-size: 1lh; color: var(--color-ink-muted); font-size: var(--text-xs); }
+    .conversation-stream { display: grid; gap: var(--space-5); align-content: start; }
+    .message { max-inline-size: 46rem; padding-block-end: var(--space-4); border-block-end: 1px solid var(--color-line); }
+    .message--user { justify-self: end; }
+    .message-role { display: block; margin-block-end: var(--space-1); }
+    .message p { margin: 0; overflow-wrap: anywhere; }
+    .empty-notice { display: grid; gap: var(--space-2); align-content: center; min-block-size: 12rem; color: var(--color-ink-soft); }
+    .empty-notice h2 { margin: 0; font-size: var(--text-lg); letter-spacing: -0.03em; }
+    .empty-notice p { margin: 0; max-inline-size: 48ch; }
+    .drawer-scrim { position: fixed; z-index: var(--z-drawer); inset: 0; border: 0; background: var(--color-scrim); opacity: 0; pointer-events: none; transition: opacity var(--duration-drawer) var(--ease-out); }
+    .drawer { position: fixed; z-index: var(--z-drawer); inset-block: 0; inset-inline-start: 0; display: grid; grid-template-rows: auto 1fr; inline-size: min(19rem, calc(100% - var(--space-6))); padding: var(--space-4); border-inline-end: 1px solid var(--color-line); background: var(--color-surface); box-shadow: var(--shadow-raised); opacity: 0; pointer-events: none; transform: translateX(-100%); transition: transform var(--duration-drawer) var(--ease-out), opacity var(--duration-drawer) var(--ease-out); }
+    .drawer.is-open, .drawer-scrim.is-open { opacity: 1; pointer-events: auto; }
+    .drawer.is-open { transform: translateX(0); }
+    .drawer__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-block-end: var(--space-4); }
+    .variant-switcher { position: fixed; z-index: var(--z-switcher); inset-inline-start: 50%; inset-block-end: max(var(--space-3), env(safe-area-inset-bottom)); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; min-block-size: var(--target-size); min-inline-size: min(20rem, calc(100% - var(--space-6))); transform: translateX(-50%); border: 1px solid var(--color-line-strong); border-radius: var(--radius-round); background: var(--color-surface-raised); box-shadow: var(--shadow-raised); }
+    .variant-switcher button { border-color: var(--color-clear); border-radius: var(--radius-round); background: var(--color-clear); }
+    .variant-switcher__label { overflow: hidden; padding-inline: var(--space-2); font-size: var(--text-sm); font-weight: 600; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* A is a launch rail: selection is secondary to an immediate prompt. */
+    .variant-a { display: grid; min-block-size: calc(100dvh - var(--chrome-bottom)); }
+    .prompt-rail { display: none; }
+    .prompt-stage { display: grid; align-content: center; gap: var(--space-8); min-block-size: calc(100dvh - var(--chrome-bottom)); padding: var(--space-8) var(--space-5); }
+    .prompt-stage__head { max-inline-size: 40rem; }
+    .prompt-stage h1 { margin: var(--space-2) 0 0; font-size: var(--text-xl); letter-spacing: -0.045em; line-height: var(--leading-tight); overflow-wrap: anywhere; }
+    .prompt-stage__context { color: var(--color-ink-soft); }
+    .prompt-stage .composer { max-inline-size: 48rem; }
+    .a-selected { max-inline-size: 48rem; }
+
+    /* B is a ledger: index, record, and operational context remain visible. */
+    .variant-b { display: grid; min-block-size: calc(100dvh - var(--chrome-bottom)); }
+    .ledger-index-pane, .ledger-detail { display: none; }
+    .ledger-record { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-block-size: calc(100dvh - var(--chrome-bottom)); padding: var(--space-8) var(--space-5); }
+    .ledger-record__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); padding-block-end: var(--space-4); border-block-end: 1px solid var(--color-line); }
+    .ledger-record h1 { margin: 0; font-size: var(--text-lg); letter-spacing: -0.035em; overflow-wrap: anywhere; }
+    .ledger-record .conversation-stream, .ledger-record .empty-notice { padding-block: var(--space-8); }
+    .ledger-record .composer { padding-block-start: var(--space-4); border-block-start: 1px solid var(--color-line); }
+    .detail-line { margin: 0; color: var(--color-ink-soft); font-size: var(--text-sm); }
+
+    /* C is a command canvas: the prompt owns the centre, history is an edge trace. */
+    .variant-c { display: grid; min-block-size: calc(100dvh - var(--chrome-bottom)); padding: var(--space-5); }
+    .command-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+    .command-header h1 { margin: 0; font-size: var(--text-md); letter-spacing: -0.035em; }
+    .command-canvas { display: grid; align-content: center; gap: var(--space-6); min-block-size: 28rem; padding-block: var(--space-10); }
+    .command-canvas__lead { max-inline-size: 34rem; }
+    .command-canvas__lead h2 { margin: var(--space-2) 0 0; font-size: var(--text-xl); letter-spacing: -0.045em; line-height: var(--leading-tight); overflow-wrap: anywhere; }
+    .command-canvas__lead p { margin: var(--space-3) 0 0; color: var(--color-ink-soft); }
+    .command-canvas .composer { max-inline-size: 44rem; }
+    .command-trace { display: grid; gap: var(--space-2); align-content: start; padding-block-start: var(--space-5); border-block-start: 1px solid var(--color-line); }
+    .command-trace__messages { display: flex; gap: var(--space-2); overflow-x: auto; padding-block-end: var(--space-2); }
+    .trace-chip { flex: 0 0 auto; max-inline-size: 18rem; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-line); border-radius: var(--radius-round); color: var(--color-ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .icon-button:hover, .text-button:hover, .send-button:hover, .recent-item:hover, .accent-choice:hover, .variant-switcher button:hover { transform: translateY(-1px); }
+      .recent-item:hover { border-color: var(--color-line-strong); }
+    }
+    .icon-button:active, .text-button:active, .send-button:active, .recent-item:active, .accent-choice:active, .variant-switcher button:active { transform: translateY(1px); }
+
+    @media (min-width: 60rem) {
+      .mobile-bar { display: none; }
+      .prototype-chrome { display: flex; align-items: center; justify-content: flex-end; }
+      .variant-a { grid-template-columns: var(--rail-width) minmax(0, 1fr); }
+      .prompt-rail { display: grid; grid-template-rows: auto auto 1fr; gap: var(--space-5); padding: var(--space-5); border-inline-end: 1px solid var(--color-line); }
+      .prompt-rail .recent-list { align-content: start; overflow-y: auto; }
+      .prompt-stage { padding: var(--space-12); }
+      .variant-b { grid-template-columns: var(--rail-width) minmax(0, 1fr) var(--detail-width); }
+      .ledger-index-pane, .ledger-detail { display: grid; align-content: start; gap: var(--space-5); padding: var(--space-5); }
+      .ledger-index-pane { border-inline-end: 1px solid var(--color-line); }
+      .ledger-detail { border-inline-start: 1px solid var(--color-line); }
+      .ledger-record { padding: var(--space-8); }
+      .variant-c { grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem); gap: var(--space-8); padding: var(--space-8); }
+      .command-header { grid-column: 1 / -1; }
+      .command-canvas { min-block-size: calc(100dvh - var(--chrome-bottom) - var(--space-16)); }
+      .command-trace { border-block-start: 0; border-inline-start: 1px solid var(--color-line); padding-block-start: 0; padding-inline-start: var(--space-5); }
+      .command-trace__messages { display: grid; overflow: visible; }
+      .trace-chip { max-inline-size: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="prototype-chrome" role="group" aria-label="Prototype controls">
+      <output class="state-readout" id="state-readout" aria-live="polite"></output>
+      <div class="accent-control" role="group" aria-label="Accent selector">
+        <span class="accent-label">Accent</span>
+        <button class="accent-choice" type="button" data-accent="amber">Amber</button>
+        <button class="accent-choice" type="button" data-accent="cyan">Cyan</button>
+        <button class="accent-choice" type="button" data-accent="lime">Lime</button>
+      </div>
+    </div>
+    <div id="app"></div>
+  </div>
+  <button class="drawer-scrim" id="drawer-scrim" type="button" aria-label="Close conversation list" disabled></button>
+  <aside class="drawer" id="drawer" aria-label="Conversation list" aria-hidden="true" inert>
+    <div class="drawer__head"><strong class="wordmark">Voidstation</strong><button class="icon-button" id="close-drawer" type="button" aria-label="Close conversation list"></button></div>
+    <div class="recent-list" id="drawer-list"></div>
+  </aside>
+  <nav class="variant-switcher" aria-label="Prototype variant">
+    <button type="button" id="previous-variant" aria-label="Previous variant"></button>
+    <span class="variant-switcher__label" id="variant-label"></span>
+    <button type="button" id="next-variant" aria-label="Next variant"></button>
+  </nav>
+
+  <script>
+    // Three variants of the conversation interface, switchable through URL parameters only.
+    const icons = {
+      menu: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+      close: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+      plus: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+      send: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4l16 8-16 8 3-8-3-8Z"/><path d="M7 12h13"/></svg>',
+      left: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
+      right: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>'
+    };
+    const names = { A: 'A Prompt-first rail', B: 'B Split ledger', C: 'C Command canvas' };
+    const conversations = [
+      { id: 'garden', title: 'Plan a small garden', time: 'Today', excerpt: 'Start with the shaded corner.', messages: [
+        { role: 'User', text: 'I have a shaded corner and one free afternoon. Where should I start?' },
+        { role: 'Assistant', text: 'Start by measuring the light, then choose two shade-tolerant plants. The Garden Skill can make a short planting list once you know the corner size.' }
+      ]},
+      { id: 'notes', title: 'Sort project notes', time: 'Yesterday', excerpt: 'Group by decision, not date.', messages: [
+        { role: 'User', text: 'My project notes are hard to scan. What should I change?' },
+        { role: 'Assistant', text: 'Group them by decision. Keep open questions at the top and move supporting detail below each decision.' }
+      ]},
+      { id: 'dinner', title: 'Weeknight dinner ideas', time: 'Mon', excerpt: 'Use the beans and greens first.', messages: [
+        { role: 'User', text: 'What can I make with beans, greens, and rice?' },
+        { role: 'Assistant', text: 'Make a rice bowl with warm beans, wilted greens, and a sharp dressing. It keeps the work to one pan.' }
+      ]}
+    ];
+    const state = { currentId: null, draft: '', drawerOpen: false, waiting: false };
+    const params = new URLSearchParams(location.search);
+    let variant = ['A', 'B', 'C'].includes(params.get('variant')) ? params.get('variant') : 'A';
+    let accent = ['amber', 'cyan', 'lime'].includes(params.get('accent')) ? params.get('accent') : 'amber';
+    const app = document.getElementById('app');
+    const drawer = document.getElementById('drawer');
+    const drawerScrim = document.getElementById('drawer-scrim');
+    const drawerList = document.getElementById('drawer-list');
+    const stateReadout = document.getElementById('state-readout');
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[char]);
+    }
+    function currentConversation() { return conversations.find(item => item.id === state.currentId) || null; }
+    function updateUrl(next = {}) {
+      variant = next.variant || variant;
+      accent = next.accent || accent;
+      const nextParams = new URLSearchParams();
+      nextParams.set('variant', variant);
+      nextParams.set('accent', accent);
+      history.replaceState(null, '', `${location.pathname}?${nextParams.toString()}`);
+      document.documentElement.dataset.accent = accent;
+    }
+    function recentList() {
+      return conversations.map(item => `<button class="recent-item" type="button" data-select="${item.id}" aria-current="${item.id === state.currentId}"><span><span class="recent-item__title">${escapeHtml(item.title)}</span><span class="recent-item__meta">${escapeHtml(item.excerpt)}</span></span><span class="recent-item__time">${item.time}</span></button>`).join('');
+    }
+    function stream(conversation) {
+      if (!conversation) return '<section class="empty-notice"><span class="eyebrow">New Conversation</span><h2>Begin with the thing in front of you.</h2><p>Your first prompt creates a Conversation. Nothing is stored after a reload.</p></section>';
+      return `<section class="conversation-stream" aria-label="${escapeHtml(conversation.title)}">${conversation.messages.map(message => `<article class="message message--${message.role.toLowerCase()}"><span class="message-role">${message.role}</span><p>${escapeHtml(message.text)}</p></article>`).join('')}</section>`;
+    }
+    function composer(label) {
+      const disabled = state.waiting ? 'disabled' : '';
+      const buttonContent = state.waiting ? 'Thinking' : icons.send;
+      const buttonLabel = state.waiting ? 'Assistant is responding' : 'Send prompt';
+      return `<form class="composer" data-composer><label for="conversation-prompt">${label}</label><div class="composer__row"><textarea id="conversation-prompt" name="prompt" rows="1" placeholder="Ask Voidstation anything">${escapeHtml(state.draft)}</textarea><button class="send-button" type="submit" aria-label="${buttonLabel}" ${disabled}>${buttonContent}</button></div><span class="composer__helper" aria-live="polite">${state.waiting ? 'Assistant is responding' : ''}</span></form>`;
+    }
+    function mobileBar(title) {
+      return `<header class="mobile-bar"><button class="icon-button" type="button" data-open-drawer aria-label="Open conversation list">${icons.menu}</button><p class="screen-title">${escapeHtml(title)}</p><button class="icon-button" type="button" data-new aria-label="New conversation">${icons.plus}</button></header>`;
+    }
+    function VariantA() {
+      const conversation = currentConversation();
+      return `<main class="variant-a">${mobileBar('Prompt-first rail')}<aside class="prompt-rail"><div><p class="wordmark">Voidstation</p><p class="eyebrow">Conversations</p></div><button class="text-button text-button--accent" type="button" data-new>New Conversation</button><div class="recent-list">${recentList()}</div></aside><section class="prompt-stage"><div class="prompt-stage__head"><span class="eyebrow">${conversation ? 'Resume Conversation' : 'Start quickly'}</span><h1>${conversation ? escapeHtml(conversation.title) : 'What do you need to work through?'}</h1><p class="prompt-stage__context">${conversation ? 'The rail keeps recent Conversations close without taking over the prompt.' : 'The prompt is the first thing you meet. Recent Conversations wait in the rail.'}</p></div>${composer(conversation ? 'Continue Conversation' : 'Start a Conversation')}<div class="a-selected">${conversation ? stream(conversation) : ''}</div></section></main>`;
+    }
+    function VariantB() {
+      const conversation = currentConversation();
+      return `<main class="variant-b">${mobileBar('Split ledger')}<aside class="ledger-index-pane"><div><p class="wordmark">Voidstation</p><p class="eyebrow">Conversation index</p></div><button class="text-button text-button--accent" type="button" data-new>New Conversation</button><div class="recent-list">${recentList()}</div></aside><section class="ledger-record"><header class="ledger-record__head"><div><span class="ledger-index">${conversation ? 'Conversation record' : 'New record'}</span><h1>${conversation ? escapeHtml(conversation.title) : 'Untitled Conversation'}</h1></div><button class="icon-button" type="button" data-new aria-label="New conversation">${icons.plus}</button></header>${stream(conversation)}${composer(conversation ? 'Add to Conversation' : 'Start a Conversation')}</section><aside class="ledger-detail"><span class="eyebrow">Holding area</span><h2 class="screen-title">Context</h2><p class="detail-line">${conversation ? `${conversation.messages.length} messages` : 'No messages yet'}</p><p class="detail-line">Skills appear here only when the assistant uses one.</p></aside></main>`;
+    }
+    function VariantC() {
+      const conversation = currentConversation();
+      const traces = conversation ? conversation.messages.slice(-3).map(message => `<span class="trace-chip"><span class="command-prefix">${message.role}</span> ${escapeHtml(message.text)}</span>`).join('') : '<span class="trace-chip">No Conversation selected</span>';
+      return `<main class="variant-c">${mobileBar('Command canvas')}<header class="command-header"><p class="wordmark">Voidstation</p><button class="text-button" type="button" data-open-drawer>Conversations</button></header><section class="command-canvas"><div class="command-canvas__lead"><span class="eyebrow">${conversation ? 'Continue' : 'New Conversation'}</span><h2>${conversation ? escapeHtml(conversation.title) : 'Give Voidstation a starting point.'}</h2><p>${conversation ? 'The active Conversation stays at the edge. The next prompt stays central.' : 'Use a short request, a loose thought, or a question. The first response makes the record.'}</p></div>${composer(conversation ? 'Next prompt' : 'Start a Conversation')}</section><aside class="command-trace"><span class="eyebrow">Conversation trace</span><div class="command-trace__messages">${traces}</div><button class="text-button" type="button" data-new>New Conversation</button></aside></main>`;
+    }
+    function render() {
+      updateUrl();
+      app.innerHTML = variant === 'A' ? VariantA() : variant === 'B' ? VariantB() : VariantC();
+      drawerList.innerHTML = recentList();
+      document.getElementById('previous-variant').innerHTML = icons.left;
+      document.getElementById('next-variant').innerHTML = icons.right;
+      document.getElementById('variant-label').textContent = names[variant];
+      document.querySelectorAll('.accent-choice').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.accent === accent)));
+      bindDynamicEvents();
+      setDrawer(state.drawerOpen);
+      updateReadout();
+    }
+    function updateReadout() {
+      const conversation = currentConversation();
+      stateReadout.textContent = `${names[variant]} · ${accent} · ${conversation ? `${conversation.messages.length} messages` : 'new Conversation'} · ${state.draft.length} draft characters`;
+    }
+    function setDrawer(open, manageFocus = false) {
+      state.drawerOpen = open;
+      drawer.classList.toggle('is-open', open);
+      drawerScrim.classList.toggle('is-open', open);
+      drawer.setAttribute('aria-hidden', String(!open));
+      drawer.inert = !open;
+      drawerScrim.disabled = !open;
+      if (manageFocus && open) document.getElementById('close-drawer').focus();
+      if (manageFocus && !open) document.querySelector('[data-open-drawer]')?.focus();
+    }
+    function focusComposer() { window.requestAnimationFrame(() => document.getElementById('conversation-prompt')?.focus()); }
+    function chooseConversation(id) { state.currentId = id; state.draft = ''; setDrawer(false); render(); focusComposer(); }
+    function newConversation() { state.currentId = null; state.draft = ''; setDrawer(false); render(); focusComposer(); }
+    function sendPrompt() {
+      const text = state.draft.trim();
+      if (!text || state.waiting) return;
+      let conversation = currentConversation();
+      if (!conversation) {
+        conversation = { id: `local-${Date.now()}`, title: text.slice(0, 42), time: 'Now', excerpt: text, messages: [] };
+        conversations.unshift(conversation);
+        state.currentId = conversation.id;
+      }
+      conversation.messages.push({ role: 'User', text });
+      conversation.excerpt = text;
+      conversation.time = 'Now';
+      const responseConversationId = conversation.id;
+      state.draft = '';
+      state.waiting = true;
+      render();
+      focusComposer();
+      window.setTimeout(() => {
+        const responseConversation = conversations.find(item => item.id === responseConversationId);
+        if (responseConversation) responseConversation.messages.push({ role: 'Assistant', text: 'This is a simulated response. What constraint should guide the next step?' });
+        state.waiting = false;
+        render();
+        focusComposer();
+      }, 420);
+    }
+    function bindDynamicEvents() {
+      document.querySelectorAll('[data-select]').forEach(button => button.addEventListener('click', () => chooseConversation(button.dataset.select)));
+      document.querySelectorAll('[data-new]').forEach(button => button.addEventListener('click', newConversation));
+      document.querySelectorAll('[data-open-drawer]').forEach(button => button.addEventListener('click', () => setDrawer(true, true)));
+      document.querySelectorAll('[data-composer]').forEach(form => form.addEventListener('submit', event => { event.preventDefault(); sendPrompt(); }));
+      const prompt = document.getElementById('conversation-prompt');
+      if (prompt) prompt.addEventListener('input', event => { state.draft = event.target.value; updateReadout(); });
+    }
+    document.querySelectorAll('.accent-choice').forEach(button => button.addEventListener('click', () => { accent = button.dataset.accent; render(); }));
+    document.getElementById('previous-variant').addEventListener('click', () => cycleVariant(-1));
+    document.getElementById('next-variant').addEventListener('click', () => cycleVariant(1));
+    document.getElementById('close-drawer').innerHTML = icons.close;
+    document.getElementById('close-drawer').addEventListener('click', () => setDrawer(false, true));
+    drawerScrim.addEventListener('click', () => setDrawer(false, true));
+    function cycleVariant(delta) { const keys = ['A', 'B', 'C']; variant = keys[(keys.indexOf(variant) + delta + keys.length) % keys.length]; render(); }
+    document.addEventListener('keydown', event => {
+      const editable = event.target.matches('input, textarea, select, [contenteditable]');
+      if (event.key === 'Escape' && state.drawerOpen) { setDrawer(false, true); return; }
+      if (!editable && event.key === 'ArrowLeft') { event.preventDefault(); cycleVariant(-1); }
+      if (!editable && event.key === 'ArrowRight') { event.preventDefault(); cycleVariant(1); }
+    });
+    render();
+  </script>
+</body>
+</html>
