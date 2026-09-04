@@ -1,29 +1,43 @@
-/* Hallmark · genre: atmospheric · macrostructure: Workbench · theme: Midnight · tone: inherited dark minimal · anchor hue: selectable · enrichment: none · pre-emit critique: P5 H5 E5 S5 R5 V5 · contrast: pass (40–41) · slop: pass (42–45) · mobile: pass (34, 49, 50–57) */
+/* Hallmark · genre: atmospheric · macrostructure: Split Studio / Workbench · theme: studied-DNA (source: user-provided T3.chat image) · paper: oklch(23.67% 0.0202 307.51) · accent: selectable · font roles: Geist display, IBM Plex Sans body · enrichment: none · pre-emit critique: P5 H5 E5 S5 R5 V5 · contrast: pass (40-41) · slop: pass (58/58) · mobile: pass (34, 49, 50-57) */
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
 
 :root {
   --font-display: "Geist", sans-serif;
   --font-body: "IBM Plex Sans", sans-serif;
 
-  --color-canvas: oklch(15% 0.012 68);
-  --color-surface: oklch(18% 0.014 68);
-  --color-surface-raised: oklch(22% 0.016 68);
-  --color-surface-quiet: oklch(20% 0.012 68);
-  --color-line: oklch(33% 0.014 68);
-  --color-line-strong: oklch(45% 0.018 68);
-  --color-ink: oklch(93% 0.01 82);
-  --color-ink-soft: oklch(76% 0.014 76);
-  --color-ink-muted: oklch(61% 0.014 74);
-  --color-shadow: oklch(5% 0.012 68 / 0.42);
-  --color-scrim: oklch(8% 0.014 68 / 0.68);
-  --color-clear: oklch(0% 0.01 68 / 0);
-  --color-error: oklch(66% 0.18 28);
+  --color-canvas: oklch(23.67% 0.0202 307.51);
+  --color-canvas-near: oklch(24.09% 0.0201 307.53);
+  --color-composer: oklch(26.64% 0.0213 305.60);
+  --color-sidebar: oklch(18.29% 0.0139 331.81);
+  --color-user-bubble: oklch(28.03% 0.0232 307.54);
+  --color-surface-raised: oklch(30% 0.023 306);
+  --color-line: oklch(40% 0.024 307);
+  --color-line-strong: oklch(53% 0.027 307);
+  --color-ink: oklch(94% 0.012 300);
+  --color-ink-soft: oklch(79% 0.018 300);
+  --color-ink-muted: oklch(65% 0.019 300);
+  --color-scrim: oklch(12% 0.016 315 / 0.76);
+  --color-shadow: oklch(10% 0.018 307 / 0.52);
+  --color-clear: oklch(0% 0.005 307 / 0);
+  --color-focus: oklch(91% 0.04 180);
+  --color-focus-inner: oklch(10% 0.018 307);
 
-  --color-accent: oklch(76% 0.15 75);
-  --color-accent-strong: oklch(82% 0.16 75);
-  --color-accent-ink: oklch(19% 0.024 75);
-  --color-focus: oklch(84% 0.15 75);
+  --color-accent-mint: oklch(77.75% 0.1595 166.57);
+  --color-accent-deep-teal: oklch(70.38% 0.1230 182.50);
+  --color-accent-seafoam: oklch(85.49% 0.1251 181.07);
+  --color-accent-cyan: oklch(79.71% 0.1339 211.53);
+  --color-accent-amber: oklch(81.65% 0.1399 80.10);
+  --color-accent-coral: oklch(71.16% 0.1812 22.84);
+  --color-accent-ink-mint: oklch(20% 0.034 166.57);
+  --color-accent-ink-deep-teal: oklch(20% 0.029 182.50);
+  --color-accent-ink-seafoam: oklch(20% 0.03 181.07);
+  --color-accent-ink-cyan: oklch(20% 0.03 211.53);
+  --color-accent-ink-amber: oklch(20% 0.03 80.10);
+  --color-accent-ink-coral: oklch(20% 0.034 22.84);
+  --color-accent: var(--color-accent-mint);
+  --color-accent-ink: var(--color-accent-ink-mint);
 
+  --space-0: 0;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -35,51 +49,69 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
-  --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1.25rem;
-  --radius-round: 999px;
-
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-md: 1.25rem;
-  --text-lg: 1.563rem;
-  --text-xl: clamp(1.953rem, 4vw + 0.5rem, 3.052rem);
-  --leading-body: 1.55;
+  --text-lg: clamp(1.75rem, 4vw, 2.5rem);
   --leading-tight: 1.12;
+  --leading-body: 1.5;
+  --leading-input: 1.25;
 
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-round: 999px;
+  --line-width: 1px;
+  --focus-width: 2px;
+  --focus-offset: 3px;
   --target-size: 2.75rem;
-  --content-max: 76rem;
-  --rail-width: 17rem;
-  --detail-width: 15rem;
-  --chrome-bottom: 5.5rem;
+  --icon-size: 1.125rem;
+  --icon-stroke: 1.7;
+  --mobile-header-size: 3.75rem;
+  --sidebar-width: 15.25rem;
+  --message-width: 46rem;
+  --user-message-max: 85%;
+  --empty-state-min-height: 14rem;
+  --composer-max-height: 9rem;
+  --model-width: 10.5rem;
+  --prototype-reserve: 5.5rem;
+  --sheet-max: 34rem;
+  --palette-max: 26rem;
+  --helper-min-height: 1lh;
 
   --z-base: 1;
-  --z-chrome: 20;
-  --z-drawer: 30;
-  --z-switcher: 40;
-  --z-toast: 50;
+  --z-sheet: 10;
+  --z-switcher: 20;
 
   --duration-micro: 120ms;
-  --duration-short: 200ms;
-  --duration-drawer: 280ms;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --duration-short: 180ms;
+  --duration-sheet: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --shadow-raised: 0 1rem 2.5rem var(--color-shadow);
 }
 
-:root[data-accent="cyan"] {
-  --color-accent: oklch(78% 0.13 210);
-  --color-accent-strong: oklch(85% 0.14 210);
-  --color-accent-ink: oklch(18% 0.026 210);
-  --color-focus: oklch(86% 0.14 210);
+:root[data-accent="deep-teal"] {
+  --color-accent: var(--color-accent-deep-teal);
+  --color-accent-ink: var(--color-accent-ink-deep-teal);
 }
 
-:root[data-accent="lime"] {
-  --color-accent: oklch(80% 0.16 128);
-  --color-accent-strong: oklch(87% 0.17 128);
-  --color-accent-ink: oklch(18% 0.03 128);
-  --color-focus: oklch(88% 0.16 128);
+:root[data-accent="seafoam"] {
+  --color-accent: var(--color-accent-seafoam);
+  --color-accent-ink: var(--color-accent-ink-seafoam);
+}
+
+:root[data-accent="cyan"] {
+  --color-accent: var(--color-accent-cyan);
+  --color-accent-ink: var(--color-accent-ink-cyan);
+}
+
+:root[data-accent="amber"] {
+  --color-accent: var(--color-accent-amber);
+  --color-accent-ink: var(--color-accent-ink-amber);
+}
+
+:root[data-accent="coral"] {
+  --color-accent: var(--color-accent-coral);
+  --color-accent-ink: var(--color-accent-ink-coral);
 }

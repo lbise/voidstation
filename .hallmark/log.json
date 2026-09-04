@@ -1,6 +1,22 @@
 [
   {
     "date": "2026-09-04",
+    "macrostructure": "Split Studio / Workbench",
+    "theme": "studied-DNA",
+    "studied": "yes",
+    "dnaSource": "user-provided T3.chat image",
+    "paper": "oklch(23.67% 0.0202 307.51)",
+    "accent": "selectable exact OKLCH palette",
+    "fontRoles": "Geist display, IBM Plex Sans body",
+    "enrichment": "none",
+    "brief": "mobile Voidstation Conversation prototype",
+    "preEmitCritique": "P5 H5 E5 S5 R5 V5",
+    "contrast": "pass (40-41)",
+    "slop": "pass (58/58)",
+    "mobile": "pass (34, 49, 50-57)"
+  },
+  {
+    "date": "2026-09-04",
     "macrostructure": "Workbench",
     "theme": "Midnight",
     "enrichment": "none",
