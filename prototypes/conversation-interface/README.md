@@ -22,7 +22,7 @@ Agent search is always available to Voidstation, so the composer has no Web or S
 
 The action menu keeps Model choices as prototype data: Auto, Kimi K2, and OpenAI-compatible. Reasoning effort is in-memory only and offers Instant, Low, Medium, and High. Skills opens a native dialog with the only decided alpha candidate, the built-in `proof` Skill. It starts enabled and can be disabled. Runtime details are still being decided.
 
-Attachment is a paperclip-only control with an accessible name. A selected filename appears in the composer status text.
+Attachment is a paperclip-only control inside the `+` action menu. It has an accessible name, and a selected filename appears in the composer status text.
 
 ## Palettes
 
