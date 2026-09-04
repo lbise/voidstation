@@ -15,3 +15,7 @@ _Avoid_: Chat, thread, session
 **Skill**:
 A named capability the assistant can invoke to perform an action or retrieve information beyond producing a conversational response.
 _Avoid_: Plugin, tool, integration
+
+**Compaction**:
+Replacing earlier model context with a summary so a conversation can continue within a model's context limit. The earlier messages remain visible and part of the conversation.
+_Avoid_: Truncation
