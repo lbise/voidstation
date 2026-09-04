@@ -5,6 +5,8 @@
     "theme": "studied-DNA",
     "studied": "yes",
     "dnaSource": "user-provided T3.chat image",
+    "selectedVariant": "A",
+    "mobileReference": "user-provided T3.chat smartphone image",
     "paper": "oklch(23.67% 0.0202 307.51)",
     "accent": "selectable exact OKLCH palette",
     "fontRoles": "Geist display, IBM Plex Sans body",
